@@ -1,17 +1,47 @@
 package org.example;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+
+import static java.util.stream.Collectors.groupingBy;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    static List<Customer> customerList;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+    public static void main(String[] args) throws IOException {
+
+        FileDAO reader = new FileDAO();
+        Path pathToFile = Paths.get("src//boilerroom.csv");
+
+        customerList = reader.fileToCustomerList(pathToFile);
+
+
+
+        Map<String,List<Customer>> cityGroups;
+        cityGroups = customerList.stream().collect(groupingBy(Customer::getCity));
+
+
+        Map<String,Integer> cityValue = new HashMap<>();
+        cityGroups.forEach((city,group)->
+                cityValue.put(city,group.stream()
+                        .mapToInt(Customer::getOrderValue)
+                        .sum()));
+
+        reader.writeRapport(top10(customerList),cityValue);
+
     }
+
+    private static List<Customer> top10(List<Customer> customerList){
+        return customerList.stream()
+                .filter(c->{return c.getOrderValue()>=1000;})
+                .sorted(Comparator.comparingInt(Customer::getOrderValue).reversed())
+                .limit(10).toList();
+    }
+
+
 }
+

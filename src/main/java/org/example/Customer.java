@@ -1,8 +1,8 @@
 package org.example;
 
 public class Customer {
-    String name,city;
-    int orderValue;
+    private String name,city;
+    private int orderValue;
 
     public Customer(){
 
