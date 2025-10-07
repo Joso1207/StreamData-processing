@@ -2,16 +2,12 @@ package org.example;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.List;
 import java.util.Map;
 
 public class FileDAO {
 
-    public void fileDAO(){
-
-    }
 
     private Customer formatLine(String line){
         String[] fields = line.split(",");
