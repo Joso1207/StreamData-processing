@@ -25,7 +25,7 @@ public class Main {
         cityGroups = customerList.stream().collect(groupingBy(Customer::getCity));
 
 
-        Map<String,Integer> cityValue = new HashMap<>();
+        Map<String,Integer> cityValue = new TreeMap<>();
         cityGroups.forEach((city,group)->
                 cityValue.put(city,group.stream()
                         .mapToInt(Customer::getOrderValue)
@@ -37,7 +37,7 @@ public class Main {
 
     private static List<Customer> top10(List<Customer> customerList){
         return customerList.stream()
-                .filter(c->{return c.getOrderValue()>=1000;})
+                .filter(c-> c.getOrderValue()>=1000)
                 .sorted(Comparator.comparingInt(Customer::getOrderValue).reversed())
                 .limit(10).toList();
     }
