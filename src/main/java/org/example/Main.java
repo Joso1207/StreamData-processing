@@ -19,20 +19,21 @@ public class Main {
 
         customerList = reader.fileToCustomerList(pathToFile);
 
-
-
         Map<String,List<Customer>> cityGroups;
         cityGroups = customerList.stream().collect(groupingBy(Customer::getCity));
 
+        reader.writeRapport(top10(customerList),cityGroupValues(cityGroups));
 
+    }
+
+    private static Map<String,Integer> cityGroupValues (Map<String,List<Customer>> groupedCities){
         Map<String,Integer> cityValue = new TreeMap<>();
-        cityGroups.forEach((city,group)->
+         groupedCities.forEach((city,group)->
                 cityValue.put(city,group.stream()
                         .mapToInt(Customer::getOrderValue)
                         .sum()));
 
-        reader.writeRapport(top10(customerList),cityValue);
-
+         return cityValue;
     }
 
     private static List<Customer> top10(List<Customer> customerList){
